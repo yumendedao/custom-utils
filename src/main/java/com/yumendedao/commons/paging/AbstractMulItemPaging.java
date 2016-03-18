@@ -2,6 +2,8 @@ package com.yumendedao.commons.paging;
 
 import java.util.List;
 
+import com.yumendedao.commons.paging.item.AbstractPageItem;
+
 public abstract class AbstractMulItemPaging<T extends AbstractPageItem<T>> extends AbstractPaging<T> {
 
 	public AbstractMulItemPaging(int pageSize) {
@@ -47,7 +49,7 @@ public abstract class AbstractMulItemPaging<T extends AbstractPageItem<T>> exten
 
 	@Override
 	public T get(int index){
-		if(index < 0 || index > getTotalCount())
+		if(index < 0 || index > getTotalItemCount())
 			return null;
 		index = getPageCount() * pageSize + index;
 		int count = 0;
@@ -60,7 +62,7 @@ public abstract class AbstractMulItemPaging<T extends AbstractPageItem<T>> exten
 	}
 	
 	public T getItemAt(int index){
-		if(index < 0 || index > getTotalCount())
+		if(index < 0 || index > getTotalItemCount())
 			return null;
 		index = getPageCount() * pageSize + index;
 		int count = 0;
@@ -76,7 +78,7 @@ public abstract class AbstractMulItemPaging<T extends AbstractPageItem<T>> exten
 	
 	@Override
 	public boolean showPage(int pageIndex) {
-		if (pageIndex > getPageCount())
+		if (pageIndex > getPageCount() || pageIndex < 0)
 			return false;
 		currentPage = pageIndex;
 		currentPageItems.clear();
@@ -93,22 +95,65 @@ public abstract class AbstractMulItemPaging<T extends AbstractPageItem<T>> exten
 		return true;
 	}
 	
+//	public boolean showChildItem(int itemIndex) {
+//		if (itemIndex > items.size() || itemIndex < 0)
+//			return false;
+////		currentPage = itemIndex;
+//		T item = currentPageItems.get(itemIndex);
+//		int childItemCount = item.getItemCount();
+//		int showChildItemCount = 0;
+//		if(childItemCount == 0){
+//			return true;
+//		}
+//		
+//		int endIndex = childItemCount + itemIndex;
+////		if()
+////		showChildItemCount = endIndex >= pageSize ? childItemCount + itemIndex - pageSize : ;
+//		if(childItemCount + itemIndex >= pageSize){
+//			for (int i = showChildItemCount; i > 0; i--) {
+//				currentPageItems.remove(currentPageItems.size());
+//			}
+//			for (T childItem : item.items) {
+//				currentPageItems.add(childItem);
+//			}
+//		} else {
+//			
+//		}
+//		currentPageItems.clear();
+//		int index;
+//		for (int i = 0; i < pageSize; i++) {
+//			index = itemIndex * pageSize + i;
+//			if (isOutOfIndex(index)) {
+//				currentPageItems.add(blankItems.get(i));
+//			} else {
+//				currentPageItems.add(getItemAt(index));
+//			}
+//		}
+//		updateUI();
+//		return true;
+//	}
+	
 	@Override
 	public int getPageCount() {
-		return getTotalCount() > 0 ? (getTotalCount() - 1) / pageSize : 0;
+		return getTotalItemCount() > 0 ? (getTotalItemCount() - 1) / pageSize : 0;
 	}
 	
 //	@Override
 //	public int query(T item) {
-//		// TODO Auto-generated method stub
 //		return super.query(item);
 //	}
 	
-	public int getTotalCount() {
+	public int getTotalItemCount() {
 		int count = 0;
 		for (T t : items) {
 			count += t.getItemCount();
 		}
 		return count;
 	}
+	
+	/**
+	 * 更新显示,只显示currentPageItems中的内容即可
+	 */
+	@Override
+	public abstract void updateUI();
 }

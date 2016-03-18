@@ -15,7 +15,7 @@ public class TestAbstractPaging {
 
 	private AbstractPaging<String> paging;
 
-	@Test(enabled = true)
+	@Test(enabled = false)
 	public void testAbstractPaging() {
 System.out.println("testAbstractPaging");
 		Scanner scanner = new Scanner(System.in);
@@ -155,6 +155,15 @@ System.out.println("testAbstractPaging");
 				// TODO Auto-generated method stub
 				
 			}
+
+			@Override
+			public String createItem(Object... objects) {
+				if(objects == null || objects.length == 0)
+					return null;
+				else 
+					return (String) objects[0];
+			}
+
 
 		};
 	}

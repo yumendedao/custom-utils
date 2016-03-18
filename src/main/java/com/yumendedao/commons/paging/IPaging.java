@@ -54,4 +54,6 @@ public interface IPaging<T>{
 
 	boolean isEquals(T obj1, T obj2);
 	
+	T createItem(Object...objects);
+	
 }

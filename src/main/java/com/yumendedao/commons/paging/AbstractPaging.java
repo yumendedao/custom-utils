@@ -12,6 +12,7 @@ import java.util.List;
  */
 public abstract class AbstractPaging<T> implements IPaging<T> {
 
+	public static final  int defaultPageSize = 10;
 	protected final List<T> items = new LinkedList<T>();
 	protected final List<T> currentPageItems = new LinkedList<T>();
 	protected final List<T> blankItems = new LinkedList<T>();
@@ -29,8 +30,8 @@ public abstract class AbstractPaging<T> implements IPaging<T> {
 		initBlackItems();
 	}
 
-	@SuppressWarnings("unused")
-	private AbstractPaging() {
+	public AbstractPaging() {
+		this(defaultPageSize);
 	}
 	
 	@Override
@@ -230,5 +231,11 @@ public abstract class AbstractPaging<T> implements IPaging<T> {
 		}
 		return list;
 	}
+	
+	/**
+	 * 更新显示,只显示currentPageItems中的内容
+	 */
+	@Override
+	public abstract void updateUI();
 
 }
